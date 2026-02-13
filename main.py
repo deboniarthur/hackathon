@@ -4,3 +4,4 @@ import requests as rq
 import yfinance as yf
 
 # Construir Solução
+# oi
