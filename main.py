@@ -75,13 +75,15 @@ while True:
     p_uphold_ask, p_uphold_bid = fetcher.get_uphold()
     p_bin, _ = fetcher.get_binance()
     p_coin, _ = fetcher.get_coinbase()
+    p_ku_ask, p_ku_bid = fetcher.get_kucoin()
     
     # Monta dicionário (Usando Ask da Uphold para compra e Bid para venda seria o ideal, 
     # mas para simplificar o MVP usamos o preço base)
     dict_precos = {
         "UpHold": p_uphold_ask,
         "Binance": p_bin,
-        "Coinbase": p_coin
+        "Coinbase": p_coin,
+        "KuCoin": p_ku_ask
     }
 
     # 2. Motor de Cálculo (Com Taxas!)
@@ -89,10 +91,11 @@ while True:
 
     # 3. Atualiza Radar
     with placeholder_radar.container():
-        c1, c2, c3 = st.columns(3)
+        c1, c2, c3, c4 = st.columns(4)
         c1.metric("UpHold", f"${p_uphold_ask:,.2f}" if p_uphold_ask else "Offline")
         c2.metric("Binance", f"${p_bin:,.2f}" if p_bin else "Offline")
         c3.metric("Coinbase", f"${p_coin:,.2f}" if p_coin else "Offline")
+        c4.metric("KuCoin", f"${p_ku_ask:,.2f}" if p_ku_ask else "Offline")
 
         # Se achar oportunidade válida (acima do mínimo configurado)
         if oportunidade and oportunidade['lucro_pct'] > lucro_minimo:
