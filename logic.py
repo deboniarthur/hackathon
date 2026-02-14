@@ -35,3 +35,31 @@ def calcular_arbitragem(precos, taxa_fee=0.001): # 0.001 = 0.1% de taxa
         "lucro_usd": lucro_liquido,
         "lucro_pct": lucro_pct
     }
+# ... (seu código da função calcular_arbitragem fica acima) ...
+
+# --- ÁREA DE TESTES 
+if __name__ == "__main__":
+    print("🛠 RODANDO TESTES DO MOTOR DE LÓGICA...")
+
+    # Cenário 1: O sonho (Binance barata, UpHold cara)
+    # Lucro bruto seria 1.000 (1%). Com taxas, deve cair para ~0.8%.
+    teste_lucro = {'Binance': 100000, 'UpHold': 101000, 'Coinbase': 100500}
+    resultado = calcular_arbitragem(teste_lucro, taxa_fee=0.001)
+    
+    print("\n--- Cenário 1: Esperado Lucro ---")
+    if resultado['lucro_pct'] > 0:
+        print(f"✅ SUCESSO! Lucro calculado: {resultado['lucro_pct']:.4f}%")
+        print(f"Detalhes: Comprar na {resultado['comprar_em']} e vender na {resultado['vender_em']}")
+    else:
+        print(f"❌ ERRO! Deveria dar lucro. Deu: {resultado['lucro_pct']}%")
+
+    # Cenário 2: O pesadelo das Taxas (Preços iguais)
+    # Se comprar e vender a 100k com taxa, você PERDE dinheiro. O código tem que mostrar negativo.
+    teste_prejuizo = {'Binance': 100000, 'UpHold': 100000}
+    resultado2 = calcular_arbitragem(teste_prejuizo, taxa_fee=0.001)
+    
+    print("\n--- Cenário 2: Esperado Prejuízo (Taxas) ---")
+    if resultado2['lucro_pct'] < 0:
+        print(f"✅ SUCESSO! O sistema detectou o custo das taxas: {resultado2['lucro_pct']:.4f}%")
+    else:
+        print(f"❌ ERRO! Deu lucro onde não devia.")
