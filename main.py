@@ -13,7 +13,7 @@ init_db()
 fetcher = PriceFetcher()
 
 # --- SIDEBAR (CONFIGURAÇÕES) ---
-st.sidebar.image("logo.jpg", width=150)
+st.sidebar.image("logo.jpeg", width=130)
 st.sidebar.header("⚙️ Configurações do Motor")
 taxa_input = st.sidebar.slider("Taxa da Exchange (%)", 0.0, 1.0, 0.1) / 100 # Converte 0.1 para 0.001
 lucro_minimo = st.sidebar.number_input("Lucro Mínimo para Execução (%)", 0.1, 5.0, 0.5)
