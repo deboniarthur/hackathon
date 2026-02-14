@@ -15,7 +15,7 @@ def init_db():
             vender_em TEXT,
             preco_compra REAL,
             preco_venda REAL,
-            lucro_pct REAL
+            lucro_real REAL
         )
     ''')
     conn.commit()
@@ -26,7 +26,7 @@ def salvar_oportunidade(compra, venda, p_compra, p_venda, lucro):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     data_atual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    c.execute("INSERT INTO oportunidades (data_hora, comprar_em, vender_em, preco_compra, preco_venda, lucro_pct) VALUES (?, ?, ?, ?, ?, ?)",
+    c.execute("INSERT INTO oportunidades (data_hora, comprar_em, vender_em, preco_compra, preco_venda, lucro_real) VALUES (?, ?, ?, ?, ?, ?)",
               (data_atual, compra, venda, p_compra, p_venda, lucro))
     conn.commit()
     conn.close()
