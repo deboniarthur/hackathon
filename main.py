@@ -6,7 +6,7 @@ from services import PriceFetcher
 from logic import calcular_arbitragem
 
 # Configuração da Página
-st.set_page_config(page_title="Spread Hunters Bot", layout="wide")
+st.set_page_config(page_title="Bot.byte", layout="wide")
 
 # Inicialização
 init_db()
