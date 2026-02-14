@@ -19,7 +19,15 @@ taxa_input = st.sidebar.slider("Taxa da Exchange (%)", 0.0, 1.0, 0.1) / 100 # Co
 lucro_minimo = st.sidebar.number_input("Lucro Mínimo para Execução (%)", 0.1, 5.0, 0.5)
 
 # --- CABEÇALHO ---
-st.title("🎯 Spread Hunters: Arbitrage Bot")
+st.title("🎯 Bot de arbitragem")
+
+with st.expander("📟 Logs do Sistema (Terminal)", expanded=False):
+    st.code(f"""
+    [INFO] Bot iniciado em: {time.strftime('%H:%M:%S')}
+    [NETWORK] Conectado a: UpHold, Binance, Coinbase
+    [STRATEGY] Buscando spreads > {lucro_minimo}%
+    [STATUS] Monitorando...
+    """)
 
 # Container de Métricas em Tempo Real (P&L Acumulado)
 # Vamos calcular isso somando o banco de dados
@@ -79,7 +87,7 @@ while True:
         if oportunidade and oportunidade['lucro_pct'] > lucro_minimo:
             st.success(f"🚀 OPORTUNIDADE: Compre na {oportunidade['comprar_em']} e venda na {oportunidade['vender_em']}")
             st.metric("Lucro Líquido Estimado", f"{oportunidade['lucro_pct']:.2f}%", f"${oportunidade['lucro_usd']:.2f}")
-            
+            st.line_chart([oportunidade['lucro_pct']]) # Gráfico simples para destacar a oportunidade
             # Salva no Banco (Simula Execução)
             salvar_oportunidade(
                 oportunidade['comprar_em'],
