@@ -30,7 +30,7 @@ if st.sidebar.button("🗑️ Limpar Histórico"):
     st.rerun() # Recarrega a página sozinho
 
 # --- CABEÇALHO ---
-st.title("🎯 Bot de arbitragem")
+st.title("🎯 Bot.byte")
 
 with st.expander("📟 Logs do Sistema (Terminal)", expanded=False):
     st.code(f"""
