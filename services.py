@@ -41,3 +41,27 @@ class PriceFetcher:
         except Exception as e:
             # Em caso de erro, retorna None para manter a consistência do seu código
             return None, None
+        
+# Função para buscar taxa da rede Bitcoin (Mempool) ---
+def get_real_network_fee():
+    """
+    Busca o custo REAL (em BTC) para transferir Bitcoin agora.
+    Fonte: API pública Mempool.space
+    """
+    try:
+        # Tenta pegar a taxa prioritária (rápida)
+        url = "https://mempool.space/api/v1/fees/recommended"
+        response = requests.get(url, timeout=3)
+        data = response.json()
+        
+        sat_per_vbyte = data['fastestFee'] # Ex: 15 sats/vbyte
+        
+        # Uma transação padrão pesa ~140 vBytes
+        tx_cost_sats = sat_per_vbyte * 140
+        
+        # Converte de Satoshi para Bitcoin
+        return tx_cost_sats / 100_000_000
+        
+    except Exception as e:
+        print(f"⚠️ Erro ao buscar taxa de rede: {e}")
+        return 0.00015 # Valor padrão conservador (15k sats) para evitar surpresas
