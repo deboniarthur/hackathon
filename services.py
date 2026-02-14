@@ -1,4 +1,5 @@
 import requests
+from kucoin.client import Market
 
 class PriceFetcher:
     def get_uphold(self):
@@ -25,4 +26,18 @@ class PriceFetcher:
             p = float(r['data']['amount'])
             return p, p
         except:
+            return None, None
+        
+
+
+    def get_kucoin(self, symbol="BTC-USDT"):
+        try:
+            # Inicializa o cliente de mercado da KuCoin
+            client = Market(url='https://api.kucoin.com')
+            ticker = client.get_ticker(symbol)
+            
+            # 'bestAsk' é o preço de venda e 'bestBid' é o de compra
+            return float(ticker['bestAsk']), float(ticker['bestBid'])
+        except Exception as e:
+            # Em caso de erro, retorna None para manter a consistência do seu código
             return None, None
