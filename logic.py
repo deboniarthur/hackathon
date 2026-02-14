@@ -1,39 +1,76 @@
-def calcular_arbitragem(precos, taxa_fee=0.001): # 0.001 = 0.1% de taxa
+from services import get_real_network_fee
+
+# Taxas reais por exchange (Diferencial técnico para o projeto)
+TAXAS_EXCHANGES = {
+    'Binance': 0.001,   # 0.1%
+    'UpHold': 0.002,    # 0.2%
+    'Coinbase': 0.005,  # 0.5%
+    'KuCoin': 0.001     # 0.1%
+}
+
+def _normalizar_preco(valor):
+    """
+    Garante que recebemos a tupla (ask, bid). 
+    Retorna None para qualquer dado inválido ou zerado, protegendo o motor de cálculo.
+    """
+    try:
+        if isinstance(valor, (list, tuple)) and len(valor) >= 2:
+            ask, bid = float(valor[0]), float(valor[1])
+            if ask > 0 and bid > 0:
+                return ask, bid
+        return None
+    except (ValueError, TypeError):
+        return None
+
+def calcular_arbitragem(precos_brutos, investimento=100.0): 
     """
     Calcula o lucro LÍQUIDO (descontando taxas de compra e venda).
     Requisito: Motor de Spread Líquido.
     """
-    # Filtra quem está offline
-    validos = {k: v for k, v in precos.items() if v is not None}
+    validos = {}
+    for exch, p in precos_brutos.items():
+        dados_limpos = _normalizar_preco(p)
+        if dados_limpos:
+            validos[exch] = dados_limpos
     
     if len(validos) < 2:
         return None
 
-    # Identifica menor e maior preço
-    exchange_compra = min(validos, key=validos.get)
-    exchange_venda = max(validos, key=validos.get)
+    # 2. Identifica o par de execução: Menor ASK (compra) e Maior BID (venda)
+    exch_compra = min(validos, key=lambda x: validos[x][0])
+    exch_venda = max(validos, key=lambda x: validos[x][1])
     
-    preco_compra_bruto = validos[exchange_compra]
-    preco_venda_bruto = validos[exchange_venda]
+    p_compra_ask = validos[exch_compra][0]
+    p_venda_bid = validos[exch_venda][1]
+
+    # Busca o custo da rede apurado via API no services.py com fallback integrado
+    taxa_rede_btc = get_real_network_fee()
+
+    # 4. Cálculo do Funil Financeiro Líquido (Net Spread)
+    # Passo A: Compra na origem (Desconta taxa de trade)
+    qtd_btc_comprada = (investimento * (1 - fee_compra)) / p_compra_ask
     
-    # --- A MATEMÁTICA DO SPREAD LÍQUIDO ---
-    # 1. Custo total na compra (Preço + Taxa)
-    custo_compra = preco_compra_bruto * (1 + taxa_fee)
+    # Passo B: Transferência entre carteiras (Abate o custo fixo da rede)
+    qtd_btc_liquida = qtd_btc_comprada - taxa_rede_btc
     
-    # 2. Receita total na venda (Preço - Taxa)
-    receita_venda = preco_venda_bruto * (1 - taxa_fee)
+    # Se as taxas de rede forem maiores que o saldo em BTC, a operação é inviável
+    if qtd_btc_liquida <= 0: 
+        return None 
+
+    # Passo C: Venda no destino (Desconta taxa de trade final)
+    valor_final_usd = (qtd_btc_liquida * p_venda_bid) * (1 - fee_venda)
     
-    # 3. Lucro Real (Net Profit)
-    lucro_liquido = receita_venda - custo_compra
-    lucro_pct = (lucro_liquido / custo_compra) * 100
-    
+    lucro_usd = valor_final_usd - investimento
+    lucro_pct = (lucro_usd / investimento) * 100
+
     return {
-        "comprar_em": exchange_compra,
-        "vender_em": exchange_venda,
-        "p_compra": preco_compra_bruto,
-        "p_venda": preco_venda_bruto,
-        "lucro_usd": lucro_liquido,
-        "lucro_pct": lucro_pct
+        "comprar_em": exch_compra,
+        "vender_em": exch_venda,
+        "p_compra_ask": p_compra_ask,
+        "p_venda_bid": p_venda_bid,
+        "lucro_usd": round(lucro_usd, 2),
+        "lucro_pct": round(lucro_pct, 4),
+        "taxa_rede_usd": round(taxa_rede_btc * p_compra_ask, 2)
     }
 # ... (seu código da função calcular_arbitragem fica acima) ...
 
