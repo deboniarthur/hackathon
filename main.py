@@ -17,6 +17,17 @@ st.sidebar.image("upholdLogo.jpg", width=150)
 st.sidebar.header("⚙️ Configurações do Motor")
 taxa_input = st.sidebar.slider("Taxa da Exchange (%)", 0.0, 1.0, 0.1) / 100 # Converte 0.1 para 0.001
 lucro_minimo = st.sidebar.number_input("Lucro Mínimo para Execução (%)", 0.1, 5.0, 0.5)
+# Coloque isso na barra lateral (st.sidebar)
+if st.sidebar.button("🗑️ Limpar Histórico"):
+    import sqlite3
+    conn = sqlite3.connect("arbitragem.db") # Ou use sua funcao get_connection()
+    c = conn.cursor()
+    c.execute("DELETE FROM oportunidades")
+    conn.commit()
+    conn.close()
+    st.toast("Histórico limpo com sucesso!", icon="✅")
+    time.sleep(1)
+    st.rerun() # Recarrega a página sozinho
 
 # --- CABEÇALHO ---
 st.title("🎯 Bot de arbitragem")

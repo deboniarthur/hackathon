@@ -25,7 +25,7 @@ def calcular_arbitragem(precos, taxa_fee=0.001): # 0.001 = 0.1% de taxa
     
     # 3. Lucro Real (Net Profit)
     lucro_liquido = receita_venda - custo_compra
-    lucro_real = (lucro_liquido / custo_compra) * 100
+    lucro_pct = (lucro_liquido / custo_compra) * 100
     
     return {
         "comprar_em": exchange_compra,
@@ -33,5 +33,5 @@ def calcular_arbitragem(precos, taxa_fee=0.001): # 0.001 = 0.1% de taxa
         "p_compra": preco_compra_bruto,
         "p_venda": preco_venda_bruto,
         "lucro_usd": lucro_liquido,
-        "lucro_real": lucro_real
+        "lucro_pct": lucro_pct
     }
