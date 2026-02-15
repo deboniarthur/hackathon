@@ -196,7 +196,7 @@ with st.sidebar:
         st.rerun()
 
     # Rodapé simples usando caption
-    st.caption("v2.4.1 | Bot.byte Algorithm")
+    st.caption("Bot.byte | 2026")
 # --- DASHBOARD (LAYOUT PRINCIPAL) ---
 
 # Top KPI Row
@@ -353,7 +353,7 @@ while True:
                 use_container_width=True
             )
         else:
-            st.text("No trades yet.")
+            st.text("Sem trades executados ainda.")
 
     # 5. Atualiza Pizza (Volume)
     with placeholder_pie.container():
