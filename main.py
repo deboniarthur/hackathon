@@ -331,7 +331,7 @@ while True:
                 fig_line = px.area(df_chart, y='acumulado', template='plotly_dark')
                 fig_line.update_traces(line_color='#00FFA3', fillcolor='rgba(0, 255, 163, 0.1)')
                 fig_line.update_layout(height=300, margin=dict(l=0, r=0, t=10, b=0), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-                placeholder_chart.plotly_chart(fig_line, use_container_width=True)
+                placeholder_chart.plotly_chart(fig_line, use_container_width=True, key=f"line_chart_{time.time()}")
             else:
                 placeholder_chart.info("Aguardando primeira execução para gerar gráfico...")
 
@@ -343,8 +343,9 @@ while True:
         if not df_historico.empty:
             # Tabela Estilizada
             st.dataframe(
-                df_historico[['lucro_pct', 'comprar_em', 'vender_em']].tail(10).iloc[::-1],
+                df_historico[['data_hora', 'lucro_pct', 'comprar_em', 'vender_em']].tail(10).iloc[::-1],
                 column_config={
+                    "data_hora": st.column_config.TextColumn("Data/Hora"),
                     "lucro_pct": st.column_config.NumberColumn("Lucro %", format="%.2f%%"),
                     "comprar_em": "Buy",
                     "vender_em": "Sell"
@@ -365,6 +366,6 @@ while True:
             fig_pie.update_traces(textinfo='percent', marker=dict(colors=['#00FFA3', '#238636', '#0E4429']))
             fig_pie.update_layout(showlegend=False, height=200, margin=dict(l=0, r=0, t=0, b=0), paper_bgcolor='rgba(0,0,0,0)')
             
-            st.plotly_chart(fig_pie, use_container_width=True)
+            st.plotly_chart(fig_pie, use_container_width=True, key=f"pie_{time.time()}")
 
     time.sleep(2)
