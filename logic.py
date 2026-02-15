@@ -21,7 +21,7 @@ def _normalizar_preco(valor):
     except:
         return None
 
-def calcular_arbitragem(precos_brutos, investimento=100.0): 
+def calcular_arbitragem(precos_brutos, investimento=100.0, taxa_fee=0.0):
     """
     Calcula o lucro LÍQUIDO (descontando taxas de compra e venda).
     Requisito: Motor de Spread Líquido.

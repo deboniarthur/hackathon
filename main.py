@@ -104,12 +104,12 @@ while True:
             st.line_chart([oportunidade['lucro_pct']]) # Gráfico simples para destacar a oportunidade
             # Salva no Banco (Simula Execução)
             salvar_oportunidade(
-                oportunidade['comprar_em'],
-                oportunidade['vender_em'],
-                oportunidade['p_compra'],
-                oportunidade['p_venda'],
-                oportunidade['lucro_pct']
-            )
+                  oportunidade['comprar_em'],
+                  oportunidade['vender_em'],
+                  oportunidade['p_compra_ask'], # Nome correto da chave
+                  oportunidade['p_venda_bid'],  # Nome correto da chave
+                  oportunidade['lucro_pct']
+)
         elif oportunidade:
             # Mostra o spread atual mesmo que seja negativo ou baixo (para o juiz ver que está calculando)
             st.info(f"Spread Atual: {oportunidade['lucro_pct']:.2f}% (Abaixo do alvo de {lucro_minimo}%)")
