@@ -33,9 +33,9 @@ def salvar_oportunidade(compra, venda, p_compra, p_venda, lucro, lucro_usd):
     conn.close()
 
 def ler_historico():
-    """Lê as últimas 10 oportunidades para mostrar na tela"""
+    """Lê as últimas oportunidades para mostrar na tela"""
     conn = sqlite3.connect(DB_NAME)
     import pandas as pd
-    df = pd.read_sql_query("SELECT * FROM oportunidades ORDER BY id DESC LIMIT 10", conn)
+    df = pd.read_sql_query("SELECT * FROM oportunidades ORDER BY id DESC LIMIT 50", conn)
     conn.close()
     return df
