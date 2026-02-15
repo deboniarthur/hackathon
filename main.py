@@ -7,7 +7,7 @@ from logic import calcular_arbitragem
 import plotly.express as px
 import plotly.graph_objects as go
 
-# --- CONFIGURAÇÃO DA PÁGINA (Deve ser o primeiro comando) ---
+# --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(
     page_title="Bot.byte | Terminal",
     page_icon="⚡",
@@ -125,7 +125,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR NATIVA (SEM CSS) ---
+# --- SIDEBAR NATIVA ---
 with st.sidebar:
 
     st.image("logo.jpeg", width=844)
@@ -157,14 +157,14 @@ with st.sidebar:
         format="%.2f"
     )
 
-    # O st.toggle é o botão de "chave" moderno do Streamlit
+    # botão de "chave" moderno do Streamlit para ativar/desativar a simulação de taxas de rede
     ignorar_rede = st.toggle("Ignorar Taxas de Rede (Modo Demo)", value=False)
     
     if ignorar_rede:
-        # st.warning cria uma caixa amarela nativa
+        # cria uma caixa amarela nativa
         st.warning("⚠️ Custos de Blockchain zerados.")
 
-    # 4. Configurações Técnicas (Escondidas no Expander para limpar o visual)
+    # 4. Configurações Técnicas 
     with st.expander("⚙️ Ajuste Fino de Taxas"):
         st.caption("Taxa média das Exchanges")
         taxa_display = st.slider(
@@ -197,6 +197,7 @@ with st.sidebar:
 
     # Rodapé simples usando caption
     st.caption("Bot.byte | 2026")
+    
 # --- DASHBOARD (LAYOUT PRINCIPAL) ---
 
 # Top KPI Row
@@ -265,6 +266,7 @@ while True:
 
     # Atualiza Radar
     with placeholder_radar.container():
+        
         # Estilo "Ticker Tape"
         r1, r2, r3, r4 = st.columns(4)
         
@@ -279,6 +281,7 @@ while True:
 
         # Lógica de Oportunidade e Gráfico
         if oportunidade and oportunidade['lucro_pct'] > lucro_minimo:
+            
             # CARD DE ALERTA DE LUCRO (Estilo Terminal)
             st.markdown(f"""
             <div style="background-color: rgba(0, 255, 163, 0.1); border: 1px solid #00FFA3; padding: 15px; border-radius: 5px; margin-top: 10px;">
@@ -294,7 +297,7 @@ while True:
             else:
                 df_visual = pd.DataFrame(columns=['lucro_pct'])
 
-            # Adiciona o dado atual "na memória" para o gráfico atualizar AGORA
+            # Adiciona o dado atual "na memória" para o gráfico atualizar na hora
             novo_dado = pd.DataFrame({'lucro_pct': [oportunidade['lucro_pct']]})
             df_chart = pd.concat([df_visual, novo_dado], ignore_index=True)
             df_chart['acumulado'] = df_chart['lucro_pct'].cumsum()

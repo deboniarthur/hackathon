@@ -39,7 +39,7 @@ class PriceFetcher:
             # 'bestAsk' é o preço de venda e 'bestBid' é o de compra
             return float(ticker['bestAsk']), float(ticker['bestBid'])
         except Exception as e:
-            # Em caso de erro, retorna None para manter a consistência do seu código
+            # Em caso de erro, retorna None para manter a consistência do código
             return None, None
         
 # Função para buscar taxa da rede Bitcoin (Mempool) ---

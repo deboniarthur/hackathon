@@ -1,6 +1,6 @@
 from services import get_real_network_fee
 
-# Taxas reais por exchange (Diferencial técnico para o projeto)
+# Taxas reais por exchange 
 TAXAS_EXCHANGES = {
     'Binance': 0.001,   # 0.1%
     'UpHold': 0.00,     # cobra no spread 
@@ -89,7 +89,6 @@ def calcular_arbitragem(precos_brutos, investimento=100.0, taxa_fee=0.0, ignorar
     return {
         "comprar_em": exch_compra,
         "vender_em": exch_venda,
-        # Mantendo compatibilidade com o main.py (usa p_compra e p_venda)
         "p_compra": p_compra_ask,
         "p_venda": p_venda_bid,
         "lucro_usd": round(lucro_usd, 2),
@@ -97,7 +96,7 @@ def calcular_arbitragem(precos_brutos, investimento=100.0, taxa_fee=0.0, ignorar
         "taxa_rede_usd": round(taxa_rede_btc * p_compra_ask, 2)
     }
 
-# --- ÁREA DE TESTES 
+# --- ÁREA DE TESTES (terminal)
 if __name__ == "__main__":
     print("🛠 RODANDO TESTES DO MOTOR DE LÓGICA...")
 
