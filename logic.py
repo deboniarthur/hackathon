@@ -86,9 +86,9 @@ if __name__ == "__main__":
         'UpHold': (102000, 101500)
     }
     
-    resultado = calcular_arbitragem(teste_lucro, investimento=500)
+    resultado = calcular_arbitragem(teste_lucro, investimento=int(input("💵 Valor do Investimento em USD: ")))
     
-    if resultado:
+    if resultado and resultado['lucro_pct'] > 0:
         print(f"\n✅ SUCESSO! Lucro: {resultado['lucro_pct']}%")
         print(f"💰 Lucro em USD: ${resultado['lucro_usd']}")
         print(f"⛽ Taxa de Rede: ${resultado['taxa_rede_usd']}")
