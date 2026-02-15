@@ -150,7 +150,7 @@ with st.sidebar:
     
     lucro_minimo = st.number_input(
         "Spread Mínimo Desejado (%)",
-        min_value=0.01,
+        min_value=-5.0,
         max_value=20.0,
         value=0.15,
         step=0.01,
@@ -346,7 +346,7 @@ while True:
         if not df_historico.empty:
             # Tabela Estilizada
             st.dataframe(
-                df_historico[['data_hora', 'lucro_pct', 'comprar_em', 'vender_em']].tail(10).iloc[::-1],
+                df_historico[['data_hora', 'lucro_pct', 'comprar_em', 'vender_em']].tail(50).iloc[::-1],
                 column_config={
                     "data_hora": st.column_config.TextColumn("Data/Hora"),
                     "lucro_pct": st.column_config.NumberColumn("Lucro %", format="%.2f%%"),
@@ -354,8 +354,11 @@ while True:
                     "vender_em": "Sell"
                 },
                 hide_index=True,
-                use_container_width=True
+                use_container_width=True,
+                height=220,
+                
             )
+            st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
         else:
             st.text("Sem trades executados ainda.")
 
