@@ -119,7 +119,7 @@ st.markdown("""
         ⚡ Bot<span style="color: #00FFA3;">.byte</span> <span style="font-size: 14px; color: #8b949e;">| PRO TERMINAL</span>
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="color: #00FFA3; font-weight: bold; font-size: 14px;">SYSTEM ONLINE</span>
+        <span style="color: #00FFA3; font-weight: bold; font-size: 14px;">SISTEMA ATIVO</span>
         <div class="status-dot"></div>
     </div>
 </div>
@@ -282,9 +282,9 @@ while True:
             # CARD DE ALERTA DE LUCRO (Estilo Terminal)
             st.markdown(f"""
             <div style="background-color: rgba(0, 255, 163, 0.1); border: 1px solid #00FFA3; padding: 15px; border-radius: 5px; margin-top: 10px;">
-                <h3 style="color: #00FFA3; margin:0;">🚀 SINAL DE OPORTUNIDADE DETECTADO</h3>
+                <label style="color: #00FFA3; margin:0;">🚀 SINAL DE OPORTUNIDADE DETECTADO</h3>
                 <p style="margin:0;">BUY: <b>{oportunidade['comprar_em']}</b> | SELL: <b>{oportunidade['vender_em']}</b></p>
-                <h2 style="color: white; margin:0;">LUCRO: {oportunidade['lucro_pct']:.2f}% <span style="font-size: 16px;">(${oportunidade['lucro_usd']:.2f})</span></h2>
+                <label style="color: white; margin:0;">LUCRO: {oportunidade['lucro_pct']:.2f}% <span style="font-size: 16px;">(${oportunidade['lucro_usd']:.2f})</span></h2>
             </div>
             """, unsafe_allow_html=True)
             
