@@ -14,4 +14,4 @@ Isso é equipe Chill!
 2. Instale as dependências:
    pip install -r requirements.txt
 3. Rode o app:
-   streamlit run app.py ou python3 -m streamlit run main.py
+   streamlit run main.py ou python3 -m streamlit run main.py
