@@ -27,7 +27,7 @@ def _normalizar_preco(valor):
 def calcular_arbitragem(precos_brutos, investimento=100.0, taxa_fee=0.0, ignorar_rede=False):
     """
     Calcula o lucro LÍQUIDO.
-    Aceita 'ignorar_rede' para o modo Demo do Frontend.
+    Se ignorar_rede=True, ZERA TODAS AS TAXAS (Modo Demo/God Mode).
     """
     validos = {}
     for exch, p in precos_brutos.items():
@@ -38,49 +38,46 @@ def calcular_arbitragem(precos_brutos, investimento=100.0, taxa_fee=0.0, ignorar
     if len(validos) < 2:
         return None
 
-    # Identifica o par de execução: Menor ASK (compra) e Maior BID (venda)
+    # Identifica o par de execução
     exch_compra = min(validos, key=lambda x: validos[x][0])
     exch_venda = max(validos, key=lambda x: validos[x][1])
     
-    # Se for a mesma exchange, não há arbitragem
     if exch_compra == exch_venda:
         return None
     
     p_compra_ask = validos[exch_compra][0]
     p_venda_bid = validos[exch_venda][1]
 
-    # Taxas: Usa a específica da exchange, ou a taxa_input global se não achar
-    fee_compra = TAXAS_EXCHANGES.get(exch_compra, taxa_fee)
-    fee_venda = TAXAS_EXCHANGES.get(exch_venda, taxa_fee)
-
-    # Lógica do Modo Demo (Ignorar Taxas de Rede)
     if ignorar_rede:
+        # MODO DEMO: Zera TUDO para garantir lucro (ideal para simular)
+        fee_compra = 0.0
+        fee_venda = 0.0
         taxa_rede_btc = 0.0
     else:
-        # Busca o custo da rede apurado via API no services.py
+        # MODO REAL: Usa as taxas reais do dicionário ou do input
+        fee_compra = TAXAS_EXCHANGES.get(exch_compra, taxa_fee)
+        fee_venda = TAXAS_EXCHANGES.get(exch_venda, taxa_fee)
         taxa_rede_btc = get_real_network_fee()
 
-    # --- O FUNIL FINANCEIRO (Cálculo do Spread Líquido) ---
+    # --- CÁLCULO FINANCEIRO ---
     
-    # Passo A: Compra na origem (Desconta taxa de trade)
+    # 1. Compra (desconta fee se houver)
     qtd_btc_comprada = (investimento * (1 - fee_compra)) / p_compra_ask
     
-    # Passo B: Transferência entre carteiras (Abate o custo fixo da rede)
+    # 2. Transfere (desconta rede se houver)
     qtd_btc_liquida = qtd_btc_comprada - taxa_rede_btc
     
-    # Se as taxas de rede forem maiores que o saldo em BTC, a operação é inviável
     if qtd_btc_liquida <= 0: 
-        # Retorna um objeto de "falha segura" para mostrar no painel que foi analisado
         return {
             "comprar_em": exch_compra,
             "vender_em": exch_venda,
             "lucro_pct": -100.0,
             "lucro_usd": -investimento,
-            "p_compra": p_compra_ask, # Padronizado para p_compra
-            "p_venda": p_venda_bid    # Padronizado para p_venda
+            "p_compra": p_compra_ask,
+            "p_venda": p_venda_bid
         }
 
-    # Passo C: Venda no destino (Desconta taxa de trade final)
+    # 3. Venda (desconta fee se houver)
     valor_final_usd = (qtd_btc_liquida * p_venda_bid) * (1 - fee_venda)
     
     lucro_usd = valor_final_usd - investimento
